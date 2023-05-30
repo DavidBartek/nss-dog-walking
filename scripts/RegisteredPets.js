@@ -1,4 +1,7 @@
 import { getPets } from "./database.js"
+import { getWalkers } from "./database.js"
+
+/* Original event listener for clicking on elements in the Pets list
 
 // add event listener which displays that a given dog barks at you 
 
@@ -29,8 +32,55 @@ document.addEventListener( // .addEventListener is a built-in method that (surpr
         }
     }
 )
+*/
+
+// new event listener: clicking on a pet element will display window alert: "Petname is being walked by Walkername"
+// This will iterate two arrays of data to find the info needed.
+// 1. Find pet object
+// 2. Find related walker object based on foreign key
+
+// import getWalkers function from database.js (now we have access to collection of pets and collection of walkers). 
+//Invoke function and assign to variable, walkers
+
+// set up event listener which listens for a click
+
+document.addEventListener(
+    "click",
+    (clickEvent) => {
+        const clickedItem = clickEvent.target // assigns target of the click to clickedItem variable
+        if (clickedItem.id.startsWith("pet")) { // looks only for elements whose id property starts with "pet"
+            const [, petPrimaryKey] = clickedItem.id.split("--") // see notes above for explanation of this line. This accesses the primary key of the clicked element.
+
+            // find pet object from clicked element.
+            // the id of the element's id property should === the id (primary key) of the intended pet object.
+            // if it does, access the id (foreign key) of the walker.
+            let foundPet = null
+            let foundWalkerID = null
+            for (const pet of pets) {
+                if (pet.id === parseInt(petPrimaryKey)) {
+                    foundPet = pet
+                    foundWalkerID = pet.walkerId
+                }
+            }
+            // using the accessed id (foreign key) of the walker above, find the corresponding id (primary key) of the walker here.
+            // the id of the accessed id (foreign key) should === the id property (primary key) of the intended walker object.
+            // if it does, access
+            let foundWalker = null
+            for (const walker of walkers) {
+                if (foundWalkerID === walker.id) {
+                    foundWalker = walker
+                }
+            }
+            // now that the corresponding pet & walker have been identified and assigned to variables, create the intended window alert.
+            // string will utilize string interpolation to access the variables containing objects (and their name properties) created.
+            window.alert(`${foundPet.name} is being walked by ${foundWalker.name}`)
+        }
+    }
+)
+
 
 const pets = getPets()
+const walkers = getWalkers()
 
 export const RegisteredPets = () => {
     let petHTML = "<ul>"
