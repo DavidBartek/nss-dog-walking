@@ -78,6 +78,9 @@ document.addEventListener(
     }
 )
 
+// Explorer Chapter 1 - capture when user clicks on a pet name.
+// on click, window alert: "petName is being walked by walkerName"
+// ... haven't we already done this?
 
 const pets = getPets()
 const walkers = getWalkers()
